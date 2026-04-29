@@ -17,13 +17,12 @@ public function buy(Request $request, $id) {
 
     $response = $monitoredService->processOrder($id);
 
-    // 4. إرجاع النتيجة كاملة
     return response()->json([
         'status' => $response['result'],
         'trace_id' => $response['trace_id'], 
         'performance' => [
             'mode' => $useOptimization ? 'Optimized' : 'Legacy',
-            'execution_time' => $response['time'] . ' seconds' // سيظهر هنا
+            'execution_time' => $response['time'] . ' seconds' 
         ]
     ]);
 }
