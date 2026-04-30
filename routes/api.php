@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
@@ -10,3 +11,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/buy/{id}', [OrderController::class, 'buy']); 
+Route::get('/search', [ProductController::class, 'search']);
