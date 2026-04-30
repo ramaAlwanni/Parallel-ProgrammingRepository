@@ -39,6 +39,8 @@ This project now supports a background daily batch process for order handling an
 	- `optimized=true` uses `SafeOrderService` (transaction + row locking)
 	- `optimized=false` uses `UnsafeOrderService` (legacy behavior)
 
+- Command: `php artisan queue:work --queue=default`
+in a dedicated terminal
 ## AOP / Decorator Monitoring
 
 `PerformanceMonitorDecorator` wraps order services and logs before/after snapshots around each chunk.
