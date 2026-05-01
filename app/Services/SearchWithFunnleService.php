@@ -22,7 +22,10 @@ class SearchWithFunnleService implements ProductSearchInterface
 
         $cachedResult = Cache::get($cacheKey);
         if ($cachedResult) {
-            return $cachedResult;
+            return [
+                'products' => $cachedResult,
+                'from_cache' => true
+            ];
         }
 
         $funnelKey = 'search_funnel_' . md5($keyword);
@@ -35,7 +38,10 @@ class SearchWithFunnleService implements ProductSearchInterface
                                 $result = $this->searchService->search($keyword, $limit);
 
                                 Cache::put($cacheKey, $result, 3600);
-                                return $result;
+                                return [
+                                    'products' => $result,
+                                    'from_cache' => false
+                                ];
                             });
         return $products;
     }

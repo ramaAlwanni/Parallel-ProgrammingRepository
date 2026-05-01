@@ -42,6 +42,7 @@ class ProductController extends Controller
             'trace_id' => $result['trace_id'] ?? null,
             'products_count' => $result['products_count'] ?? 0,
             'execution_time_seconds' => $result['time'] ?? null,
+            'from_cache' => $result['from_cache'] ?? false,
             'products' => $result['products'] ?? []
         ]);
     }
