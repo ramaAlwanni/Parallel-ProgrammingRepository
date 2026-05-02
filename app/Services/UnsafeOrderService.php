@@ -1,7 +1,12 @@
 <?php
 namespace App\Services;
 use App\Interfaces\OrderServiceInterface;
+use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UnsafeOrderService implements OrderServiceInterface
 {
@@ -25,7 +30,7 @@ class UnsafeOrderService implements OrderServiceInterface
             //create order without transaction 
             $order = Order::create([
                 'product_id' => $productId,
-                'user_id' => 1, 
+                'user_id' => $this->resolveUserId(), 
                 'status' => 'completed',
                 'total_price' => $product->price
             ]);
@@ -41,5 +46,52 @@ class UnsafeOrderService implements OrderServiceInterface
             return "Success (Unsafe)";
         }
         return "Out of Stock";
+    }
+
+    private function resolveUserId(): int
+    {
+        return (int) User::query()->firstOrCreate(
+            ['email' => 'system@example.com'],
+            [
+                'name' => 'System User',
+                'password' => Hash::make(Str::random(32)),
+            ]
+        )->id;
+    }
+
+    public function processOrderChunk(array $productIds, array $context = []): array
+    {
+        $summary = [
+            'processed' => 0,
+            'success' => 0,
+            'not_found' => 0,
+            'out_of_stock' => 0,
+            'failed' => 0,
+        ];
+
+        foreach ($productIds as $productId) {
+            $summary['processed']++;
+
+            $result = $this->processOrder((int) $productId);
+
+            if ($result === 'Success (Unsafe)') {
+                $summary['success']++;
+                continue;
+            }
+
+            if ($result === 'Out of Stock') {
+                $summary['out_of_stock']++;
+                continue;
+            }
+
+            if ($result === 'Product Not Found') {
+                $summary['not_found']++;
+                continue;
+            }
+
+            $summary['failed']++;
+        }
+
+        return $summary;
     }
 }
