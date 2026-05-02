@@ -34,7 +34,7 @@ class PerformanceMonitorDecorator implements OrderServiceInterface {
             return [
                 'result' => $result,
                 'time' => $duration,
-                'trace_id' => $traceId
+                'trace_id' => $traceId 
             ];
 
         } catch (\Exception $e) {

@@ -11,6 +11,7 @@ class OrderController extends Controller {
 
 public function buy(Request $request, $id) {
     $useOptimization = $request->query('optimized') === 'true';
+    
     $baseService = $useOptimization ? new \App\Services\SafeOrderService() : new \App\Services\UnsafeOrderService();
 
     $monitoredService = new \App\Services\PerformanceMonitorDecorator($baseService);
