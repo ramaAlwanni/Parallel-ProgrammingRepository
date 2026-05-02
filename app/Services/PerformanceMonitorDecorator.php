@@ -39,18 +39,14 @@ class PerformanceMonitorDecorator implements OrderServiceInterface
             Log::info('[Tracing End]', [
                 'trace_id' => $traceId,
                 'status' => 'Success',
-                'duration' => $duration . 's',
-                'result' => $result,
-                'before' => $before,
-                'after' => $after,
-                'delta' => [
-                    'stock_change' => $before['stock_sum'] !== null && $after['stock_sum'] !== null
-                        ? $before['stock_sum'] - $after['stock_sum']
-                        : null,
-                ],
+                'duration' => $duration . 's'
             ]);
 
-            return $result;
+            return [
+                'result' => $result,
+                'time' => $duration,
+                'trace_id' => $traceId 
+            ];
 
         } catch (\Exception $e) {
             Log::error('[Tracing Error]', [

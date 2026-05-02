@@ -19,5 +19,11 @@ class ProductSeeder extends Seeder
                 'store_id' => $store->id
             ]);
         });
+        //Race Condition Product for testing purposes 
+        Product::create([
+            'name' => 'Test product',
+            'stock' => 1,
+            'store_id' => 1
+        ]);
     }
 }

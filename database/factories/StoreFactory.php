@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use function Illuminate\Support\fake;
 
 /**
  * @extends Factory<Store>
@@ -15,9 +16,9 @@ class StoreFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->company(),
-            'description' => fake()->paragraph(2),
-            'address' => fake()->address(),
-        ];
+            'name' => $this->faker->company(),
+            'description' => $this->faker->paragraph(2),
+            'address' => $this->faker->address(),
+];
     }
 }
