@@ -2,50 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\ProductSearchInterface;
 use App\Services\Decorators\SearchMonitoringDecorator;
+use App\Services\SearchWithCacheService;
+use App\Services\SearchWithOutCacheService;
 use Illuminate\Http\Request;
-use App\Services\SearchWithFunnleService;
-use App\Services\SearchWithOutFunnleService;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
-    protected $searchWithFunnleService;
+    protected ProductSearchInterface $searchService;
 
-    public function __construct(SearchWithFunnleService $searchWithFunnleService)
+    public function __construct(ProductSearchInterface $searchService)
     {
-        $this->searchWithFunnleService = $searchWithFunnleService;
+        $this->searchService = $searchService;
     }
 //-----------------------------------------------------------------------------------------
     public function search(Request $request)
     {
         $keyword = $request->query('q');
-        $useFunnel = $request->query('use_funnel', '0');
 
-        if ($useFunnel == 0) {
-            $coreService = new SearchWithOutFunnleService();
-            $tracingService = new SearchMonitoringDecorator($coreService);
-            $result = $tracingService->search($keyword, 5);
-
-            return response()->json([
-                'status' => 'BEFORE (No Funnel)',
-                'trace_id' => $result['trace_id'],
-                'products_count' => count($result['products']),
-                'execution_time_seconds' => $result['time'],
-                'products' => $result['products']
-            ]);
-        }
-
-        $result = $this->searchWithFunnleService->search($keyword, 5);
+        $result = $this->searchService->search($keyword, 5);
 
         return response()->json([
-            'status' => 'AFTER (With Funnel)',
-            'trace_id' => $result['trace_id'] ?? null,
-            'products_count' => $result['products_count'] ?? 0,
-            'execution_time_seconds' => $result['time'] ?? null,
-            'from_cache' => $result['from_cache'] ?? false,
-            'products' => $result['products'] ?? []
+            'status' => $request->query('use_cache') == 1 ? 'After Caching' : 'Before Caching',
+            'result' => $result,
         ]);
     }
+
 
        
 }
