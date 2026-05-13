@@ -6,6 +6,8 @@ use App\Interfaces\ProductSearchInterface;
 use App\Services\Decorators\SearchMonitoringDecorator;
 use App\Services\SearchWithCacheService;
 use App\Services\SearchWithOutCacheService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RateLimiter::for('search_api', function ($request) {
+            return Limit::perMinute(10)->by($request->ip());
+        });
     }
 }

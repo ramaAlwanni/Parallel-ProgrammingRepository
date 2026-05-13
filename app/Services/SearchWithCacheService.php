@@ -11,6 +11,8 @@ class SearchWithCacheService implements ProductSearchInterface
     {
         $Key = 'search_result_' . md5($keyword);
         $existsInCache = Cache::has($Key);
+        $lockKey = $Key . '_lock';
+
 
         //if result exists in cache
         $cachedResult = Cache::get($Key);
@@ -18,18 +20,18 @@ class SearchWithCacheService implements ProductSearchInterface
             $result = $cachedResult;
         }
 
-        //if result doesn't exist in cache
-        $result = Cache::remember( $Key,
-                                    now()->addHour(),
-                                    function () use ($keyword, $limit) {
-                                        $service = new SearchWithOutCacheService();
-                                        return $service->search($keyword, $limit);
-                                    });
-
+        $result = Cache::lock($lockKey, 10)->block(5, function () use ($Key, $keyword, $limit) {
+            //if result doesn't exist in cache
+            return Cache::remember(  $Key,
+                                now()->addHour(),
+                                function () use ($keyword, $limit) {
+                                    $service = new SearchWithOutCacheService();
+                                    return $service->search($keyword, $limit);
+            });
+        });
         return [
             'data' => $result,
             'from_cache' => $existsInCache
-        ];                
-           
+        ];
     }
 }
