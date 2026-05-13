@@ -14,10 +14,21 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+
+        Product::create([
+            'name' => 'minus_sample',
+            'description' => 'Another test product with minimal data',
+            'price' => 49.99,
+            'stock' => 20,
+            'store_id' => 1
+        ]);
+
         Store::all()->each(function ($store) {
             Product::factory(5)->create([
                 'store_id' => $store->id
             ]);
         });
+
+       
     }
 }

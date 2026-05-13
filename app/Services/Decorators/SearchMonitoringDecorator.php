@@ -37,11 +37,11 @@ class SearchMonitoringDecorator implements ProductSearchInterface
                 'duration' => $duration . 's'
             ]);
 
-            return [
-                'products' => $result['products'],
+            return array_merge($result, [
                 'trace_id' => $traceId,
-                'time' => round($duration, 4)
-            ];
+                'execution_time' => round($duration, 4)
+            ]);
+
         } catch (\Exception $e) {
             Log::error("[Tracing Error] ID: $traceId", [
                 'message' => $e->getMessage()
