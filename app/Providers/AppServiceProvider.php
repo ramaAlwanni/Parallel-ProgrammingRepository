@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Interfaces\OrderServiceInterface;
+use App\Services\AsyncOrderDecorator;
+use App\Services\PerformanceMonitorDecorator;
+use App\Services\SafeOrderService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +15,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(OrderServiceInterface::class, function () {
+            return new AsyncOrderDecorator(
+                new PerformanceMonitorDecorator(
+                    new SafeOrderService()
+                )
+            );
+        });
     }
 
     /**
