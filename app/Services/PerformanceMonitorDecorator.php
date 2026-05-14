@@ -17,7 +17,7 @@ class PerformanceMonitorDecorator implements OrderServiceInterface
         $this->reportWriter = $reportWriter ?? app(OrderBatchReportWriter::class);
     }
 
-    public function processOrder(int $productId): string
+    public function processOrder(int $productId): array
     {
         $traceId = (string) Str::uuid();
         $start = microtime(true);
