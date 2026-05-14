@@ -10,5 +10,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/buy/{id}', [OrderController::class, 'buy']); 
-Route::get('/search', [ProductController::class, 'search']);
+Route::get('/buy/{id}', [OrderController::class, 'buy']);
+
+Route::middleware(['throttle:search_api'])->group(function () {
+    Route::get('/search', [ProductController::class, 'search']);
+});
