@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use App\Interfaces\ProductSearchInterface;
 
-class SearchWithOutFunnleService implements ProductSearchInterface
+class SearchWithOutCacheService implements ProductSearchInterface
 {
     public function search(string $keyword, int $limit = 5): array
     {
@@ -15,8 +15,7 @@ class SearchWithOutFunnleService implements ProductSearchInterface
                             ->get();
 
         return [
-            'products' => $products,
-            'products_count' => $products->count(),
+            'products' => $products->pluck('name'),
         ];
     }
 }
