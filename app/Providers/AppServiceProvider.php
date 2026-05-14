@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Interfaces\OrderServiceInterface;
+use App\Services\AsyncOrderDecorator;
+use App\Services\PerformanceMonitorDecorator;
+use App\Services\SafeOrderService;
 use App\Interfaces\ProductSearchInterface;
 use App\Services\Decorators\SearchMonitoringDecorator;
 use App\Services\SearchWithCacheService;
@@ -17,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(OrderServiceInterface::class, function () {
+            return new AsyncOrderDecorator(
+                new PerformanceMonitorDecorator(
+                    new SafeOrderService()
+                )
+            );
+          });
         $this->app->bind(ProductSearchInterface::class, function ($app) {
             if (request()->query('use_cache') == 1) {
                 $core = new SearchWithCacheService();

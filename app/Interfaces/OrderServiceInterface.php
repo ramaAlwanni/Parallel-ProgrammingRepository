@@ -2,7 +2,7 @@
 namespace App\Interfaces;
 
 interface OrderServiceInterface {
-    public function processOrder(int $productId): string;
+    public function processOrder(int $productId);
 
     /**
      * @param array<int> $productIds
