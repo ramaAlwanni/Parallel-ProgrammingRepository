@@ -34,5 +34,13 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    // config/services.php
+'cluster' => [
+    'nodes' => [
+        ['id' => 'Node_A', 'ip' => '192.168.1.10'],
+        ['id' => 'Node_B', 'ip' => '192.168.1.11'],
+        ['id' => 'Node_C', 'ip' => '192.168.1.12'],
+    ],
+],
 
 ];
