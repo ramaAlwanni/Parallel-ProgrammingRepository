@@ -11,6 +11,7 @@ Route::get('/user', function (Request $request) {
 
 
 Route::get('/buy/{id}', [OrderController::class, 'buy']);
+Route::post('/runInventoryBatch', [OrderController::class, 'runInventoryBatch']);
 
 Route::middleware(['throttle:search_api'])->group(function () {
     Route::get('/search', [ProductController::class, 'search']);
