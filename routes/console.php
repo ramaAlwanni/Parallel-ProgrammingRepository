@@ -74,10 +74,5 @@ Artisan::command('orders:process-daily {--optimized=true} {--chunk=200} {--queue
 })->purpose('Dispatch daily order processing jobs in chunks');
 
 Schedule::command('orders:process-daily --optimized=true --chunk=200')
-<<<<<<< HEAD
-    ->dailyAt('01:00')
+    ->everyMinute()
     ->withoutOverlapping();
-=======
-    ->everyMinute() // التعديل هنا
-    ->withoutOverlapping();
->>>>>>> fc63e9cef3e7e2ddeb6da7ff38cf2345eef4c621
