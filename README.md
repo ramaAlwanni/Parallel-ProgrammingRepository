@@ -5,7 +5,7 @@ Unlike traditional e-commerce applications, the primary focus here is on Paralle
 resource management, and asynchronous processing.
 
 # 1. تحميل Redis من:
-https://github.com/redis-windows/redis-windows/releases
+https://github.phpcom/redis-windows/redis-wccdindows/releases
 
 # نزل:
 Redis-8.6.2-Windows-x64-msys2-with-Service.zip
